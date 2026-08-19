@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard-card">
+
+    <div class="dashboard-header">
+        <h2>Welcome, {{ name }} 🎉</h2>
+        <p>Start your assessment and discover your ideal career path.</p>
+    </div>
+
+    <div class="features-grid">
+
+        <div class="feature-card">
+            <div class="icon">🧠</div>
+            <h4>Skill Assessment</h4>
+            <p>Randomized questions every attempt</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon">🛡</div>
+            <h4>Secure Proctoring</h4>
+            <p>Webcam & tab monitoring</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon">📊</div>
+            <h4>Career Analytics</h4>
+            <p>Top 3 career recommendations</p>
+        </div>
+
+    </div>
+
+    <div class="center-btn">
+        <a href="/exam_instructions" class="start-btn">Start Assessment 🚀</a>
+    </div>
+
+</div>
+
+{% endblock %}

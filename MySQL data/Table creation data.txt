@@ -1,0 +1,96 @@
+-- =========================
+-- DATABASE
+-- =========================
+CREATE DATABASE IF NOT EXISTS opsacrs;
+USE opsacrs;
+
+-- =========================
+-- USERS TABLE
+-- =========================
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fullname VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    password TEXT,
+    dob DATE,
+    course VARCHAR(100),
+    college VARCHAR(100),
+    photo VARCHAR(255)
+);
+
+-- =========================
+-- APTITUDE QUESTIONS
+-- =========================
+CREATE TABLE aptitude_questions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    question TEXT,
+    option1 VARCHAR(255),
+    option2 VARCHAR(255),
+    option3 VARCHAR(255),
+    option4 VARCHAR(255),
+    correct_option VARCHAR(255)
+);
+
+INSERT INTO aptitude_questions (question, option1, option2, option3, option4, correct_option) VALUES
+('What is 10 + 20?', '10', '20', '30', '40', '30'),
+('If x=5, x^2=?', '10', '15', '20', '25', '25'),
+('Speed = ?', 'Distance/Time', 'Time/Distance', 'Speed*Time', 'None', 'Distance/Time'),
+('5 * 6 = ?', '20', '25', '30', '35', '30'),
+('12 / 4 = ?', '2', '3', '4', '6', '3');
+
+-- =========================
+-- PSEUDOCODE QUESTIONS
+-- =========================
+CREATE TABLE pseudocode_questions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    question TEXT,
+    option1 VARCHAR(255),
+    option2 VARCHAR(255),
+    option3 VARCHAR(255),
+    option4 VARCHAR(255),
+    correct_option VARCHAR(255)
+);
+
+INSERT INTO pseudocode_questions (question, option1, option2, option3, option4, correct_option) VALUES
+('Which is loop?', 'if', 'for', 'break', 'return', 'for'),
+('Condition check?', 'if', 'loop', 'array', 'print', 'if'),
+('Store multiple values?', 'array', 'if', 'loop', 'return', 'array'),
+('Exit loop?', 'continue', 'break', 'if', 'print', 'break'),
+('Function return?', 'return', 'break', 'loop', 'if', 'return');
+
+-- =========================
+-- CODING QUESTIONS
+-- =========================
+CREATE TABLE coding_questions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    question TEXT,
+    input_desc TEXT,
+    output_desc TEXT,
+    constraints TEXT
+);
+
+INSERT INTO coding_questions (question, input_desc, output_desc, constraints) VALUES
+('Print Hello World', 'No input', 'Hello World', 'Basic'),
+('Add two numbers', 'a b', 'sum', '1<=a,b<=100'),
+('Check even or odd', 'n', 'Even/Odd', '1<=n<=1000');
+
+-- =========================
+-- EXAM ATTEMPTS
+-- =========================
+CREATE TABLE exam_attempts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    score INT,
+    total_questions INT,
+    date_taken TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =========================
+-- RESUME TABLE
+-- =========================
+CREATE TABLE resumes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    file_name VARCHAR(255),
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

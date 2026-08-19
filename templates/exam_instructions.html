@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard-card text-center">
+
+<h2 class="mb-4">Assessment Instructions</h2>
+
+<div class="text-start mb-4" style="max-width:700px; margin:auto;">
+<ul>
+<li>The assessment consists of three sections: Aptitude, Pseudocode, and Coding.</li>
+
+<li>Questions must be attempted sequentially. Once a section is completed, you cannot return to it.</li>
+
+<li>Ensure a stable internet connection throughout the test to avoid interruptions.</li>
+
+<li>Your webcam must remain ON at all times. Face visibility is mandatory for proctoring.</li>
+
+<li>Tab switching, minimizing the window, or navigating away from the exam is strictly prohibited.</li>
+
+<li>Copy, paste, right-click, or use of external tools (including AI assistants) is not allowed.</li>
+
+<li>Any suspicious activity will be recorded as a violation. After 3 violations, the test will be automatically submitted.</li>
+
+<li>In the coding section, select your preferred language and ensure correct input/output format before running the code.</li>
+
+<li>After submission, a detailed performance report and career recommendations will be generated based on your results.</li>
+</ul>
+
+</div>
+
+<hr>
+
+<h5 class="mb-3">Required Permissions</h5>
+
+<div class="permission-row">
+<label class="switch">
+<input type="checkbox" id="cameraSwitch">
+<span class="slider"></span>
+</label>
+<span class="permission-text">Enable Camera Access</span>
+</div>
+
+<br>
+
+<div class="permission-row">
+<label class="switch">
+<input type="checkbox" id="micSwitch">
+<span class="slider"></span>
+</label>
+<span class="permission-text">Enable Microphone Access</span>
+</div>
+
+<br><br>
+<br>
+<h4>Exam will start in <span id="countdown" color:"red">10</span> seconds after permissions are enabled</h4>
+
+
+</div>
+
+
+<style>
+
+.permission-row{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:15px;
+font-size:16px;
+}
+
+.switch{
+position:relative;
+display:inline-block;
+width:50px;
+height:26px;
+}
+
+.switch input{
+opacity:0;
+width:0;
+height:0;
+}
+
+.slider{
+position:absolute;
+cursor:pointer;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:#ccc;
+border-radius:34px;
+transition:0.3s;
+}
+
+.slider:before{
+position:absolute;
+content:"";
+height:20px;
+width:20px;
+left:3px;
+bottom:3px;
+background:white;
+border-radius:50%;
+transition:0.3s;
+}
+
+input:checked + .slider{
+background:#4c6ef5;
+}
+
+input:checked + .slider:before{
+transform:translateX(24px);
+}
+
+.permission-text{
+font-weight:500;
+}
+
+</style>
+
+
+<script>
+
+let cameraGranted = false;
+let micGranted = false;
+
+let seconds = 10;
+let timer = null;
+
+function updateDisplay(){
+    document.getElementById("countdown").innerHTML = seconds;
+}
+
+function startTimer(){
+
+    if(timer) return; // prevent multiple timers
+
+    timer = setInterval(function(){
+
+        if(cameraGranted && micGranted){
+            seconds--;
+            updateDisplay();
+
+            if(seconds <= 0){
+                clearInterval(timer);
+                window.location.href = "/exam";
+            }
+        }
+
+    },1000);
+}
+
+function pauseTimer(){
+    // No need to clear interval → just stop decreasing
+}
+
+/* CAMERA SWITCH */
+document.getElementById("cameraSwitch").addEventListener("change", async function(){
+
+    if(this.checked){
+        try{
+            await navigator.mediaDevices.getUserMedia({video:true});
+            cameraGranted = true;
+        }catch{
+            alert("Camera permission required");
+            this.checked = false;
+            cameraGranted = false;
+        }
+    }else{
+        cameraGranted = false;
+    }
+
+    controlTimer();
+});
+
+/* MIC SWITCH */
+document.getElementById("micSwitch").addEventListener("change", async function(){
+
+    if(this.checked){
+        try{
+            await navigator.mediaDevices.getUserMedia({audio:true});
+            micGranted = true;
+        }catch{
+            alert("Microphone permission required");
+            this.checked = false;
+            micGranted = false;
+        }
+    }else{
+        micGranted = false;
+    }
+
+    controlTimer();
+});
+
+
+function controlTimer(){
+
+    if(cameraGranted && micGranted){
+        startTimer(); // resume
+    }else{
+        pauseTimer(); // pause
+    }
+
+}
+
+</script>
+
+<script>
+localStorage.removeItem("violations",0);
+</script>
+
+{% endblock %}

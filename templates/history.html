@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card-box">
+
+<h2 class="mb-4"> Test History</h2>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <p style="color:#666;">
+            View all your previous test attempts including score,
+            performance, and date. Track your progress over time.
+        </p>
+    </div>
+</div>
+
+<h4 class="mb-3">Your Test Attempts</h4>
+
+{% if attempts %}
+<table class="table table-bordered table-hover text-center">
+
+<thead>
+<tr>
+<th>#</th>
+<th>Score</th>
+<th>Total</th>
+<th>Percentage</th>
+<th>Date</th>
+</tr>
+</thead>
+
+<tbody>
+{% for row in attempts %}
+<tr>
+<td>{{ loop.index }}</td>
+<td>{{ row[0] }}</td>
+<td>{{ row[1] }}</td>
+<td>{{ ((row[0]/row[1])*100) | round(2) }}%</td>
+<td>{{ row[2] }}</td>
+</tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+{% else %}
+<p style="color:#777;">No test attempts yet.</p>
+{% endif %}
+
+</div>
+
+{% endblock %}

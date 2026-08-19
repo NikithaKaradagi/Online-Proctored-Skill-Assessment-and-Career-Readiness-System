@@ -1,0 +1,32 @@
+Flask==2.3.3
+flask-mysqldb==1.0.1
+Werkzeug==2.3.7
+Pillow==10.0.1
+sendgrid==6.10.0
+python-dotenv==1.0.1
+
+
+
+
+System Requirements:
+
+- Python 3.x
+- MySQL Server
+- GCC (for C/C++)
+- JDK (for Java)
+- R Language (for R support)
+
+
+Package                     USE
+
+Flask                      Web framework
+
+flask-mysqldb              MySQL connection
+
+Werkzeug                   Password hashing
+
+Pillow                     Image upload (profile photo)                                               
+
+sendgrid                   Email OTP
+
+python-dotenv              (optional) env config

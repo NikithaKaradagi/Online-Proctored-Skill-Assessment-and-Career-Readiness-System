@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 700px;
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.2);
+}
+
+.small-chart {
+    max-width: 120px;
+    margin: auto;
+}
+
+.progress {
+    height: 8px;
+}
+</style>
+
+<div class="auth-container">
+
+<div class="auth-card">
+
+    <!-- TITLE -->
+    <h4 class="text-center mb-3">🎯 Career Recommendation Report</h4>
+    <p class="text-center" style="color:#666;">Performance-based analysis</p>
+
+    <!-- SCORE -->
+    <div class="text-center mb-4">
+        <h5>{{ score }} / {{ total }}</h5>
+        <strong>{{ percentage }}%</strong>
+    </div>
+
+    <!-- SECTION -->
+    <div class="mb-3">
+        <small>Aptitude ({{ apt_score }}/{{ apt_total }})</small>
+        <div class="progress mb-2">
+            <div class="progress-bar bg-success"
+                style="width: {{ (apt_score/apt_total*100) if apt_total else 0 }}%">
+            </div>
+        </div>
+
+        <small>Pseudocode ({{ pseudo_score }}/{{ pseudo_total }})</small>
+        <div class="progress mb-2">
+            <div class="progress-bar bg-info"
+                style="width: {{ (pseudo_score/pseudo_total*100) if pseudo_total else 0 }}%">
+            </div>
+        </div>
+
+        <small>Coding ({{ coding_score }}/{{ coding_total }})</small>
+        <div class="progress">
+            <div class="progress-bar bg-warning"
+                style="width: {{ (coding_score/coding_total*100) if coding_total else 0 }}%">
+            </div>
+        </div>
+    </div>
+
+    <!-- INSIGHTS -->
+<div class="mb-3">
+    <h6>🔍 Insights</h6>
+
+    {% set total_attempted = apt_score + pseudo_score + coding_score %}
+
+    {% if total_attempted == 0 %}
+        <p><strong>Strongest:</strong> None</p>
+        <p><strong>Focus:</strong> Please attempt the test properly</p>
+
+    {% else %}
+        {% if apt_score >= pseudo_score and apt_score >= coding_score %}
+            <p><strong>Strongest:</strong> Aptitude</p>
+        {% elif pseudo_score >= apt_score and pseudo_score >= coding_score %}
+            <p><strong>Strongest:</strong> Pseudocode</p>
+        {% else %}
+            <p><strong>Strongest:</strong> Coding</p>
+        {% endif %}
+
+        <p><strong>Focus:</strong> Improve weakest section</p>
+    {% endif %}
+</div>    
+
+    <!-- CAREER -->
+    <div class="mb-3">
+    <h6>🎯 Recommended Roles</h6>
+
+    {% if percentage >= 85 %}
+        <div class="alert alert-success p-2 mb-1">🚀 Software Engineer</div>
+        <div class="alert alert-success p-2 mb-1">⚙️ Backend Developer</div>
+        <div class="alert alert-success p-2">🌐 Full Stack Developer</div>
+
+    {% elif percentage >= 65 %}
+        <div class="alert alert-info p-2 mb-1">💻 Frontend Developer</div>
+        <div class="alert alert-info p-2 mb-1">📊 Data Analyst</div>
+        <div class="alert alert-info p-2">🧪 QA Engineer</div>
+
+    {% elif percentage >= 40 %}
+        <div class="alert alert-warning p-2 mb-1">🧑‍💻 Trainee Developer</div>
+        <div class="alert alert-warning p-2 mb-1">🛠 Support Engineer</div>
+        <div class="alert alert-warning p-2">🔍 Testing Intern</div>
+
+    {% else %}
+        <div class="alert alert-danger p-2 mb-1">📘 Beginner IT Roles</div>
+        <div class="alert alert-danger p-2 mb-1">🎓 Internship Programs</div>
+        <div class="alert alert-danger p-2">🧠 Skill Development Track</div>
+    {% endif %}
+</div>
+    <!-- CHARTS -->
+    <div class="row text-center mt-3">
+
+        <div class="col-6">
+            <div class="small-chart">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <canvas id="barChart" style="max-height:120px;"></canvas>
+        </div>
+
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="text-center mt-4">
+        <a href="/home" class="btn btn-primary btn-sm">🏠 Home</a>
+        <a href="/history" class="btn btn-outline-secondary btn-sm ms-2">📜 History</a>
+    </div>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+new Chart(document.getElementById('pieChart'), {
+    type: 'pie',
+    data: {
+        labels: ['Correct', 'Wrong'],
+        datasets: [{
+            data: [{{ score }}, {{ total - score }}]
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } }
+    }
+});
+
+new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Aptitude', 'Pseudocode', 'Coding'],
+        datasets: [{
+            data: [{{ apt_score }}, {{ pseudo_score }}, {{ coding_score }}]
+        }]
+    },
+    options: {
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+</script>
+
+{% endblock %}
